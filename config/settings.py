@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-f)(wtu88wfs=qv^3%4f^oofuutlub5b!4g0n%0+_)a_cp2p_p9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [  ".vercel.app", ".onrender.com"]
 
 
 # Application definition
@@ -176,3 +176,6 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
 }
 
+CSRF_TRUSTED_ORIGINS =[
+    "https://gallery-syzj.onrender.com/"
+]
