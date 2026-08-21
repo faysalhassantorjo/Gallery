@@ -4,7 +4,7 @@ from .models import Photo, GallerySettings
 
 @admin.register(Photo)
 class PhotoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'uploaded_at')
+    # list_display = ('id', 'uploaded_at')
     readonly_fields = ('uploaded_at',)
 
 

@@ -2,6 +2,12 @@
 {% load static %}
 
 {% block content %}
+{% if request.user.is_superuser %}
+<div class="floating-upload">
+    <a href="{% url 'photo_upload' %}" class="btn-upload-link">&#8679; Upload</a>
+</div>
+{% endif %}
+
 <form method="post" action="{% url 'lock' %}" class="lock-form floating-lock">
     {% csrf_token %}
     <button type="submit" class="btn-lock" aria-label="Lock Gallery">&#128274; Lock</button>

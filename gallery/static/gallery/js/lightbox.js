@@ -94,4 +94,26 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'ArrowRight') showNext();
         if (e.key === 'ArrowLeft') showPrev();
     });
+
+    // Touch swipe navigation for mobile
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    lightbox.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].clientX;
+        touchStartY = e.changedTouches[0].clientY;
+    }, { passive: true });
+
+    lightbox.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        const dy = e.changedTouches[0].clientY - touchStartY;
+
+        // Only trigger if horizontal swipe is dominant and long enough
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+            if (dx < 0) showNext();   // swipe left → next
+            else showPrev();          // swipe right → previous
+        } else if (Math.abs(dy) > 80 && Math.abs(dx) < 40) {
+            closeLightbox();          // swipe down → close
+        }
+    }, { passive: true });
 });

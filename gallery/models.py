@@ -36,4 +36,6 @@ class Photo(models.Model):
         except:
             return ''
 
+    def __str__(self):
+        return f'{self.image.url}'
 

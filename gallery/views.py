@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
+from django.http import HttpResponseForbidden
 from django.views.decorators.http import require_POST
 from .models import Photo, GallerySettings
 from .auth import gallery_authenticated
@@ -42,6 +44,7 @@ def lock_view(request):
 @gallery_authenticated
 def gallery_list_view(request):
     photos = Photo.objects.all()
+    print("total number of photos: ", len(photos))
     return render(request, 'gallery/gallery.html', {'photos': photos})
 
 
@@ -54,3 +57,32 @@ def photo_delete_view(request, photo_id):
     return redirect('gallery')
 
 
+@login_required(login_url='/admin/login/')
+def photo_upload_view(request):
+    """Multi-image upload — restricted to Django superusers only."""
+    if not request.user.is_superuser:
+        return HttpResponseForbidden("Superuser access required.")
+
+    uploaded = 0
+    errors = []
+
+    if request.method == 'POST':
+        files = request.FILES.getlist('images')
+
+        if not files:
+            errors.append("No images were selected.")
+        else:
+            for f in files:
+                try:
+                    Photo.objects.create(image=f)
+                    uploaded += 1
+                except Exception as e:
+                    errors.append(f"{f.name}: {e}")
+
+        if uploaded and not errors:
+            return redirect('gallery')
+
+    return render(request, 'gallery/upload.html', {
+        'uploaded': uploaded,
+        'errors': errors,
+    })
