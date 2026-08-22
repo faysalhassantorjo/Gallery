@@ -59,9 +59,6 @@ def photo_delete_view(request, photo_id):
 
 @gallery_authenticated
 def photo_upload_view(request):
-    """Multi-image upload — restricted to Django superusers only."""
-    if not request.user.is_superuser:
-        return HttpResponseForbidden("Superuser access required.")
 
     uploaded = 0
     errors = []
