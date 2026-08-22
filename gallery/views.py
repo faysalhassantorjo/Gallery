@@ -57,7 +57,7 @@ def photo_delete_view(request, photo_id):
     return redirect('gallery')
 
 
-@login_required(login_url='/admin/login/')
+@gallery_authenticated
 def photo_upload_view(request):
     """Multi-image upload — restricted to Django superusers only."""
     if not request.user.is_superuser:
